@@ -1,36 +1,20 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Custom styles */
-body {
-  @apply bg-pink-50 text-red-800 font-sans;
+/* reset & full-page background */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-
-h1,
-h2,
-h3 {
-  @apply font-bold text-red-700;
-}
-
-.poem-box {
-  @apply bg-pink-100 rounded-3xl shadow-lg p-6 sm:p-10 text-lg sm:text-xl md:text-2xl text-center leading-relaxed whitespace-pre-line;
-  border: 2px solid #f9d5e5;
-}
-
-button {
-  @apply rounded-2xl px-5 py-3 font-semibold transition-all;
-}
-
-/* Cute pastel palette for buttons */
-.btn-option {
-  @apply bg-red-100 hover:bg-red-200 text-red-700;
-}
-
-.btn-next {
-  @apply bg-pink-300 hover:bg-pink-400 text-pink-900;
-}
-
-.btn-home {
-  @apply bg-gray-300 hover:bg-gray-400 text-gray-800;
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-family: sans-serif;
+  background: url("/src/assets/bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  overflow: hidden;
 }

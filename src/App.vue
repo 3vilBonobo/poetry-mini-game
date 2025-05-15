@@ -1,3 +1,9 @@
+<script setup>
+import GameConsole from "./components/GameConsole.vue";
+</script>
+
 <template>
-  <router-view />
+  <GameConsole />
 </template>
+
+<style scoped></style>
