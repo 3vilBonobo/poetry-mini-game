@@ -38,13 +38,15 @@
     <audio ref="bg" :src="musicSrc" loop autoplay :muted="muted"></audio>
   </div>
 </template>
+
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import story from "@/assets/story.json";
+// Import the MP3 so Webpack bundles it under your publicPath
+import musicSrc from "@/assets/music.mp3";
 
 const currentId = ref("start");
-const muted = ref(false);
-const musicSrc = "/src/assets/music.mp3";
+const muted = ref(true); // start muted so autoplay is allowed
 const bg = ref(null);
 
 const current = computed(() => story[currentId.value]);
@@ -58,31 +60,33 @@ function reset() {
 }
 
 function toggleSound() {
-  muted.value = !muted.value;
   if (!bg.value) return;
-  bg.value.muted = muted.value;
-  // if we're unmuting, kick off playback in case it was blocked
-  if (!muted.value) {
+
+  // If currently muted, unmute and play (inside click handler = allowed)
+  if (muted.value) {
+    muted.value = false;
+    bg.value.muted = false;
     bg.value
       .play()
-      .catch(() =>
-        console.warn("Playback blocked—will resume on next interaction.")
-      );
+      .catch((err) => console.warn("Playback still blocked:", err));
+  } else {
+    // Otherwise pause & mute
+    bg.value.pause();
+    muted.value = true;
+    bg.value.muted = true;
   }
 }
 
 onMounted(() => {
-  if (bg.value) {
-    // try to play on mount
-    bg.value
-      .play()
-      .catch(() =>
-        console.warn("Autoplay blocked—toggle sound to start music.")
-      );
-    bg.value.muted = muted.value;
-  }
+  if (!bg.value) return;
+  // Ensure it's muted on load so autoplay is permitted
+  bg.value.muted = true;
+  bg.value.play().catch(() => {
+    // Silent fail is fine — we just want the audio context unlocked
+  });
 });
 </script>
+
 <style scoped>
 .game-console {
   position: relative;
@@ -167,7 +171,6 @@ onMounted(() => {
   left: 18rem;
   background: transparent;
 }
-
 .home-btn:hover {
   background-color: rgba(0, 0, 0, 0.148);
 }
@@ -177,7 +180,6 @@ onMounted(() => {
   right: 23.5rem;
   background-color: transparent;
 }
-
 .sound-btn:hover {
   background-color: rgba(0, 0, 0, 0.148);
 }
@@ -189,25 +191,20 @@ onMounted(() => {
     width: 90%;
     height: auto;
   }
-
   .top-screen {
     top: 5%;
   }
-
   .bottom-screen {
     bottom: 5%;
   }
-
   .control-btn {
     width: 4rem;
     height: 4rem;
   }
-
   .home-btn {
     bottom: 10%;
     left: 5%;
   }
-
   .sound-btn {
     bottom: 10%;
     right: 5%;
