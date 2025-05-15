@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "homepage": "https://3vilbonobo.github.io/poetry-mini-game/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
